@@ -25,9 +25,6 @@ A modern online bookstore built with the **MERN stack (MongoDB, Express.js, Reac
 
 ---
 
-## 📸 Screenshots
-
-![Home Page](./screenshots/home.png)
 
 ---
 
@@ -57,7 +54,7 @@ server.js
 
 ### Clone the rep
 
-git clone https://github.com/yourusername/devbookstore.git
+git clone https://github.com/Indir07/book-store
 cd devbookstore
 
 cd server
@@ -65,7 +62,7 @@ npm install
 
 
 npm run server
-http://localhost:5000
+
 
 
 ## Install client dependencies
@@ -74,6 +71,6 @@ npm install
 
 ## Start frontend app
 npm run dev
-http://localhost:5173
+
 
 
