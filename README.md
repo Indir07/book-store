@@ -15,13 +15,6 @@ A modern online bookstore built with the **MERN stack (MongoDB, Express.js, Reac
 ✅ Modern UI with Tailwind CSS  
 ✅ Easily extendable to support carts, checkout, payments, etc.
 
----
-
-## 🖥️ Live Demo
-
-> _Coming soon_ — deploy your frontend to [Vercel](https://vercel.com/) or [Netlify](https://netlify.com/) and backend to [Render](https://render.com/) or [Railway](https://railway.app/).
-
----
 
 ## 🛠️ Tech Stack
 
