@@ -1,46 +1,51 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Logout from "./Logout";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import Logout from "./Logout";
 
 function Navbar() {
   const [authUser] = useAuth();
+  const navigate = useNavigate();
 
   return (
-    <div className="navbar bg-base-100 dark:bg-slate-800 dark:text-white">
-      <div className="flex-1">
-        <Link to="/" className="btn btn-ghost text-xl text-pink-500">
-          DevBookStore
+    <nav className="flex items-center justify-between px-6 py-4 bg-white shadow">
+      <div>
+        <Link to="/" className="text-xl font-bold text-pink-500">
+          BookStore
         </Link>
       </div>
-      <div className="flex-none">
-        <ul className="menu menu-horizontal px-1">
-          {authUser ? (
-            <>
-              <li className="flex items-center">
-                <span>{authUser.name}</span>
-              </li>
-              <li>
-                <Logout />
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <Link to="/login" className="hover:text-pink-500">
-                  Login
-                </Link>
-              </li>
-              <li>
-                <Link to="/signup" className="hover:text-pink-500">
-                  Signup
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
+      <div className="flex items-center gap-4">
+        <Link to="/" className="hover:text-pink-500">
+          Home
+        </Link>
+        <Link to="/course" className="hover:text-pink-500">
+          Courses
+        </Link>
+        {authUser ? (
+          <>
+            <span className="text-gray-700">
+              {authUser.name || authUser.username}
+            </span>
+            <Logout />
+          </>
+        ) : (
+          <>
+            <button
+              className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-700"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+            <button
+              className="bg-gray-200 text-pink-500 px-4 py-2 rounded hover:bg-pink-100"
+              onClick={() => navigate("/signup")}
+            >
+              Signup
+            </button>
+          </>
+        )}
       </div>
-    </div>
+    </nav>
   );
 }
 

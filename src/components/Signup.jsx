@@ -1,75 +1,83 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
 
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [authUser, setAuthUser] = useAuth();
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = { name, email, password };
-    localStorage.setItem("Users", JSON.stringify(user));
-    navigate("/login");
+    setError("");
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: name, email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        // Optionally, auto-login after signup
+        setAuthUser({ name, email });
+        localStorage.setItem("Users", JSON.stringify({ name, email }));
+        navigate("/");
+      } else {
+        setError(data.message || "Signup failed");
+      }
+    } catch (err) {
+      setError("Network error");
+    }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white dark:bg-slate-800 p-10 rounded-lg shadow-lg w-full max-w-md"
-      >
-        <h1 className="text-3xl mb-5 text-center dark:text-white">Signup</h1>
-        <div className="mb-4">
-          <label className="block mb-1 text-gray-600 dark:text-gray-300">
-            Name
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-slate-700 dark:text-white"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1 text-gray-600 dark:text-gray-300">
-            Email
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-slate-700 dark:text-white"
-          />
-        </div>
-        <div className="mb-6">
-          <label className="block mb-1 text-gray-600 dark:text-gray-300">
-            Password
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 dark:bg-slate-700 dark:text-white"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-700 transition"
-        >
-          Signup
+    <div className="max-w-md mx-auto mt-20 p-8 bg-white rounded shadow">
+      <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          className="input input-bordered w-full"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+          autoComplete="name"
+        />
+        <input
+          type="email"
+          className="input input-bordered w-full"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="email"
+        />
+        <input
+          type="password"
+          className="input input-bordered w-full"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="new-password"
+        />
+        <button type="submit" className="btn btn-secondary w-full">
+          Sign Up
         </button>
-        <p className="text-center mt-4 dark:text-gray-300">
-          Already have an account?{" "}
-          <Link to="/login" className="text-pink-500 hover:underline">
-            Login
-          </Link>
-        </p>
       </form>
+      <p className="mt-4">
+        Already have an account?{" "}
+        <span
+          className="text-pink-500 cursor-pointer"
+          onClick={() => navigate("/login")}
+        >
+          Login
+        </span>
+      </p>
     </div>
   );
 }
