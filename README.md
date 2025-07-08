@@ -1,4 +1,4 @@
-# DevBookStore 📚
+# BookStore 📚
 
 A modern online bookstore built with the **MERN stack (MongoDB, Express.js, React, Node.js)**. Browse programming books, view details, and add them to your cart. Styled beautifully with Tailwind CSS for a sleek, dark-mode-friendly UI.
 
