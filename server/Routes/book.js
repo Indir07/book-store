@@ -34,6 +34,43 @@ router.get("/free", async (req, res) => {
   }
 });
 
+
+// SEED route - must be before /:id
+router.get("/seed", async (req, res) => {
+  try {
+    await Book.deleteMany();
+    await Book.insertMany([
+      {
+        title: "JavaScript: The Good Parts",
+        price: 19.99,
+        image:
+          "https://images-na.ssl-images-amazon.com/images/I/81kqrwS1nNL.jpg",
+      },
+      {
+        title: "Eloquent JavaScript",
+        price: 24.5,
+        image:
+          "https://images-na.ssl-images-amazon.com/images/I/91asIC1fRwL.jpg",
+      },
+      {
+        title: "You Don't Know JS Yet",
+        price: 29.0,
+        image:
+          "https://images-na.ssl-images-amazon.com/images/I/81kqrwS1nNL._AC_UL600_SR600,600_.jpg",
+      },
+      {
+        title: "Clean Code",
+        price: 32.75,
+        image:
+          "https://images-na.ssl-images-amazon.com/images/I/41xShlnTZTL._SX374_BO1,204,203,200_.jpg",
+      },
+    ]);
+    res.send("Seeded books.");
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // READ one book
 router.get("/:id", async (req, res) => {
   try {
@@ -67,37 +104,6 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-});
-
-router.get("/seed", async (req, res) => {
-  await Book.deleteMany();
-  await Book.insertMany([
-    {
-      title: "JavaScript: The Good Parts",
-      price: 19.99,
-      image:
-        "https://m.media-amazon.com/images/I/51gdVAEfPUL._SX379_BO1,204,203,200_.jpg",
-    },
-    {
-      title: "Eloquent JavaScript",
-      price: 24.5,
-      image:
-        "https://m.media-amazon.com/images/I/71fRZp6nSXL._AC_UF1000,1000_QL80_.jpg",
-    },
-    {
-      title: "You Dont Know JS Yet",
-      price: 29.0,
-      image:
-        "https://m.media-amazon.com/images/I/61uYB9HhTEL._AC_UF1000,1000_QL80_.jpg",
-    },
-    {
-      title: "Clean Code",
-      price: 32.75,
-      image:
-        "https://m.media-amazon.com/images/I/41-sN-mzwKL._SX374_BO1,204,203,200_.jpg",
-    },
-  ]);
-  res.send("Seeded books.");
 });
 
 export default router;
