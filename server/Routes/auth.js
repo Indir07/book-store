@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
     });
     await newUser.save();
     console.log('User registered:', newUser); // Debug log
-    res.status(201).json({ user: { fullname, email } });
+    res.status(201).json({ user: { _id: newUser._id, fullname, email } });
   } catch (err) {
     console.error('Registration error:', err); // Debug log
     res.status(400).json({ message: "Registration failed" });
@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ message: "Invalid credentials" });
-    res.json({ user: { fullname: user.fullname, email: user.email } });
+    res.json({ user: { _id: user._id, fullname: user.fullname, email: user.email } });
   } catch (err) {
     res.status(500).json({ message: "Login failed" });
   }

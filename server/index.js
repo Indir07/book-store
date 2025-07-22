@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./Routes/auth.js";
 import bookRoutes from "./Routes/book.js";
 import cartRoutes from "./Routes/cart.js";
+import cartBuyRoutes from "./Routes/cart-buy.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api", cartRoutes);
+app.use("/api", cartBuyRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {

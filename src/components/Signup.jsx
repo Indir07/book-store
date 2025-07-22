@@ -22,10 +22,13 @@ function Signup() {
       const data = await res.json();
       if (res.ok) {
         // Optionally, auto-login after signup
-        setAuthUser({ name, email });
-        localStorage.setItem("Users", JSON.stringify({ name, email }));
+        setAuthUser(data.user);
+        localStorage.setItem("Users", JSON.stringify(data.user));
         navigate("/");
       } else {
+        // fallback for legacy or error: store fullname for user info
+        setAuthUser({ fullname: name, email });
+        localStorage.setItem("Users", JSON.stringify({ fullname: name, email }));
         setError(data.message || "Signup failed");
       }
     } catch (err) {
