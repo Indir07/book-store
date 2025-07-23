@@ -44,6 +44,21 @@ function Navbar() {
   const [showUserInfo, setShowUserInfo] = useState(false);
   const userIconRef = useRef(null);
 
+  // Dark mode state
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   const handleUserIconClick = () => {
     setShowUserInfo((prev) => !prev);
   };
@@ -53,13 +68,32 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 bg-white shadow">
+    <nav className="flex items-center justify-between px-6 py-4 bg-white dark:bg-slate-900 shadow">
       <div>
         <Link to="/" className="text-xl font-bold text-pink-500">
           BookStore
         </Link>
       </div>
       <div className="flex items-center gap-4">
+        {/* Dark/Light mode toggle */}
+        <button
+          className="focus:outline-none flex items-center justify-center w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+          title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          onClick={() => setDarkMode((prev) => !prev)}
+        >
+          {darkMode ? (
+            // Moon icon
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+            </svg>
+          ) : (
+            // Sun icon
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" fill="currentColor" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.95 6.95l-1.41-1.41M6.05 6.05L4.64 4.64m12.02 0l-1.41 1.41M6.05 17.95l-1.41 1.41" />
+            </svg>
+          )}
+        </button>
         <Link to="/" className="hover:text-pink-500">
           Home
         </Link>

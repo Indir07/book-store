@@ -1,8 +1,38 @@
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 import express from "express";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 
 const router = express.Router();
+
+const resetTokens = {};
+
+// Request password reset
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ message: "User not found" });
+  const token = crypto.randomBytes(32).toString("hex");
+  resetTokens[token] = { userId: user._id, expires: Date.now() + 3600000 };
+
+  console.log(`Password reset link: http://localhost:5173/reset-password/${token}`);
+  res.json({ message: "Password reset link sent to email (check console in demo)." });
+});
+
+// Reset password
+router.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  const data = resetTokens[token];
+  if (!data || data.expires < Date.now()) return res.status(400).json({ message: "Invalid or expired token" });
+  const user = await User.findById(data.userId);
+  if (!user) return res.status(404).json({ message: "User not found" });
+  user.password = password;
+  await user.save();
+  delete resetTokens[token];
+  res.json({ message: "Password reset successful" });
+});
 
 // Register
 router.post("/register", async (req, res) => {
@@ -23,10 +53,10 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
     await newUser.save();
-    console.log('User registered:', newUser); // Debug log
+    console.log('User registered:', newUser); 
     res.status(201).json({ user: { _id: newUser._id, fullname, email } });
   } catch (err) {
-    console.error('Registration error:', err); // Debug log
+    console.error('Registration error:', err); 
     res.status(400).json({ message: "Registration failed" });
   }
 });

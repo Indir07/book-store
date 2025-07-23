@@ -71,7 +71,7 @@ export default function CartProvider({ children }) {
     } catch {}
   };
 
-  // Clear cart (backend)
+  // Clear cart
   const clearCart = async () => {
     if (!authUser?.email) return;
     try {

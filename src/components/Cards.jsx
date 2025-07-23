@@ -1,26 +1,32 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useCart } from "../context/CartContext";
+import BookModal from "./BookModal";
+import { AuthContext } from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 function Cards({ item }) {
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+  
   return (
     <div className="mt-4 my-3 p-3">
-      <div className="card w-92 bg-base-100 shadow-xl hover:scale-105 duration-200 dark:bg-slate-900 dark:text-white dark:border">
-        <figure>
-          <img src={item.image} alt={item.title} />
+      <div className="card w-92 bg-base-100 shadow-xl hover:scale-105 duration-200 dark:bg-slate-900 dark:text-white dark:border transition-transform cursor-pointer" onClick={() => navigate(`/book/${item._id}`)}>
+        <figure className="bg-gray-100 rounded-t-lg p-2 flex justify-center items-center min-h-[250px]">
+          <img
+            src={item.image}
+            alt={item.title}
+            className="h-60 object-contain rounded"
+          />
         </figure>
-        <div className="card-body">
-          <h2 className="card-title">
-            {item.title}
-            {item.category && (
-              <div className="badge badge-secondary">{item.category}</div>
-            )}
-          </h2>
-          <div className="card-actions justify-between">
-            <div className="badge badge-outline">${item.price}</div>
+        <div className="card-body flex flex-col justify-between">
+          <h2 className="card-title text-xl font-bold mb-3">{item.title}</h2>
+          <div className="flex justify-between items-center mb-3">
+            <span className="badge badge-primary text-lg font-extrabold px-4 py-2">
+              ${item.price}
+            </span>
             <button
-              className="cursor-pointer px-2 py-1 rounded-full border-[2px] hover:bg-pink-500 hover:text-white duration-200"
-              onClick={() => addToCart(item)}
+              className="btn btn-pink rounded-full shadow-md transition-transform transform hover:scale-105"
+              onClick={e => { e.stopPropagation(); addToCart(item); }}
             >
               Add to Cart
             </button>

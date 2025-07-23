@@ -5,7 +5,8 @@ import { useAuth } from "../context/AuthProvider";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+    const navigate = useNavigate(); 
+    const [showForgot, setShowForgot] = useState(false);
   const [authUser, setAuthUser] = useAuth();
   const [error, setError] = useState("");
 
@@ -58,6 +59,18 @@ function Login() {
           Login
         </button>
       </form>
+            <div className="mt-2 text-center">
+                <button
+                    type="button"
+                    className="text-blue-500 hover:underline"
+                    onClick={() => setShowForgot(true)}
+                >
+                    Forgot Password?
+                </button>
+            </div>
+            {showForgot && (
+                <ForgotPasswordModal onClose={() => setShowForgot(false)} />
+            )}
       <p className="mt-4">
         Don't have an account?{" "}
         <span
